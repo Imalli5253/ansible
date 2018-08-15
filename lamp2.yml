@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: yes
+  tasks: 
+    - name: Update packages and & install apache2
+      apt:
+        name: apache2
+        update_cache: yes
+        state: present
+    - name: Start the service 
+      service: 
+        name: apache2
+        enabled: yes
+        state: restarted
+    - name: Install php packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - php
+        - libapache2-mod-php
+        - php-mycrypt
+        - php-mysql
+    - name: restart the service 
+      service: 
+        name: apache2
+        state: restarted
+
